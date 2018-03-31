@@ -5,7 +5,7 @@
 #include "translation.h"
 
 char * readRNAFull(FILE *fp) {
-    fp = fopen("TestSequenceCompleteGenome", "r");
+    fp = fopen("genome.txt", "r");
 }
 
 char *readRNAPart(FILE *, int, int) {
