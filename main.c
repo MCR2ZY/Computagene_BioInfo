@@ -6,7 +6,6 @@ programa:       Search for protein in mRNA sequence
 Linguagem:      C/C++
 Informacoes:    README.md
 
-
 */
 
 
@@ -19,13 +18,15 @@ int main() {
     FILE *fp;
     fp = fopen("genome.txt", "r");
     if (fp == NULL) {
+
         perror("Error FILE");
         return (-1);
+
     }else{
+
         fclose(fp);
 
     }
-
 
 
     return 0;
