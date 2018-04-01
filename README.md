@@ -1,8 +1,8 @@
 
 
-#Name algoritm
+# Name algoritm
 
-## Algoritm Genetic for Search u protein in mRNA sequence in file.txt.
+## Algoritm Genetic for Search protein in mRNA sequence in file.txt.
 
 ### Implementation
 
