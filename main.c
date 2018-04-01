@@ -16,6 +16,7 @@ Informacoes:    README.md
 int main() {
 
     FILE *fp;
+
     fp = fopen("genome.txt", "r");
     if (fp == NULL) {
 
@@ -23,7 +24,7 @@ int main() {
         return (-1);
 
     }else{
-
+        printf("file ok\n");
         fclose(fp);
 
     }
