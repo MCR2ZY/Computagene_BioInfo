@@ -15,5 +15,7 @@ int main() {
         exit(1);
     }
     readRNAFull(fp);
+    //readRNAPart(fp, 0, 800);
+    fclose(fp);
     return 0;
 }
