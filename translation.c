@@ -6,7 +6,7 @@
 
 char * readRNAFull(FILE *fp) {
     char cabecalho[TAMCABECALHO];
-    char *RNA;
+    char *rna;
     char aux;
     int qntLetras = 0;
 
@@ -14,79 +14,113 @@ char * readRNAFull(FILE *fp) {
 
     aux = fgetc(fp);
     while(aux != EOF) { // Conta a quantidade de letras total do arquivo
-        if(aux != '\n' || aux != '\t' || aux != ' ') {
+        if(aux != '\n' && aux != '\t' && aux != ' ') {
             qntLetras++;
             aux = fgetc(fp);
         }
         else
             aux = fgetc(fp);
     }
-    printf("O numero toral de caratfcteres eh: %d \n", qntLetras);
+    printf("O numero total de caratfcteres eh: %d \n", qntLetras);
 
     rewind(fp); // Retorna ao inicio do arquivo
 
     fgets(cabecalho, sizeof(cabecalho), fp); // Consome a primeira linha
 
-    RNA = (char *) malloc(sizeof(char) * (qntLetras+1)); //Aloca memoria para todas as letras
+    rna = (char *) malloc(sizeof(char) * (qntLetras+1)); //Aloca memoria para todas as letras
 
-    for (int i = 0; i <= qntLetras; i++) { // Salva as letras na memoria
+    for (int i = 0; i < qntLetras; i++) { // Salva as letras na memoria
         aux = fgetc(fp);
-        if(aux != '\n' || aux != '\t' || aux != ' ') {
-            RNA[i] = aux;
+        if(aux != '\n' && aux != '\t' && aux != ' ') {
+            rna[i] = aux;
+        }
+        else {
+            i--;
         }
     }
-    RNA[qntLetras+1] = '\0'; // Adiciona o caracter /0 ao final da cadeia de letras
-    printf("%s", cabecalho); // Imprime o cabecalho
-    for (int j = 0; j < qntLetras; j++) {
-        printf("%c", RNA[j]); // Imprime as letras
-    }
+    rna[qntLetras] = '\0'; // Adiciona o caracter /0 ao final da cadeia de letras
 
-    return RNA; // Retorna ponteiro com a sequencia
+    return rna; // Retorna ponteiro com a sequencia
 }
 
-char *readRNAPart(FILE *rma, int inicio, int fim) {
-    char cabecalho[TAMCABECALHO];\
-    char *RNA;
+char *readRNAPart(char *rna, int inicio, int fim) {
+    char *rnaPart;
     int qntLetras;
 
+    inicio -= 1;
+    fim -= 1;
     qntLetras = (fim - inicio) + 1;
-    printf("O numero toral de caratfcteres eh: %d \n", qntLetras);
+
+    printf("O numero parcial de caratfcteres eh: %d \n", qntLetras);
     if(qntLetras%3){
         printf("Quantidade de nucleotideos nao eh multiplo de tres.");
         exit(EXIT_FAILURE);
     }
 
-    fgets(cabecalho, sizeof(cabecalho), rma); // Consome a primeira linha
+    rnaPart = (char *) malloc(sizeof(char) * (qntLetras+1)); //Aloca memoria para as letras necessarias
 
-    RNA = (char *) malloc(sizeof(char) * (qntLetras+1)); //Aloca memoria para as letras necessarias
-
-
-    if(fseek(rma, inicio, SEEK_CUR)){ //Posiciona ponteiro do arquivo na posição inicial
-        printf("Erro ao reposicionar ponteiro no arquivo");
-        exit(EXIT_FAILURE);
+    for (int i = 0; i < qntLetras; i++) { // Salva as letras na memoria
+        rnaPart[i] = rna[inicio+i];
     }
 
-    char teste = fgetc(rma);
-    printf("%c\n", teste);
+    rnaPart[qntLetras] = '\0'; // Adiciona o caracter /0 ao final da cadeia de letras
 
-    for (int i = 0; i <= qntLetras; i++) { // Salva as letras na memoria
-        RNA[i] = fgetc(rma);
-    }
+    printf("\n%s\n", rnaPart);
 
-    RNA[qntLetras+1] = '\0'; // Adiciona o caracter /0 ao final da cadeia de letras
-    printf("%s", RNA); // Imprime as letras
-
-    return RNA;
+    return rnaPart;
 }
 
-char *polipeptideoGerado(char *RNA) {
+char *polipeptideoGerado(char *rna) {
+    char *polipeptideo, codon[3];
+    int cont = 0;
+
+    for (int i = 0; rna[i] != '\0' ; i++) {
+        cont++;
+    }
+
+    polipeptideo = (char *) malloc(sizeof(char) * (cont/3) );
+
+    for (int i = 0; rna[i+3] != '\0'; i + 3) {
+
+    }
+
     return NULL;
 }
 
-void invertRNA(char *RNA) {
+char * invertRNA(char *rna) {
+    char *rnaAux;
+    int  cont = 0;
+    int i,j;
 
+    for (i = 0; rna[i] != '\0' ; i++) {
+        cont++;
+    }
+
+    rnaAux = (char *) malloc(sizeof(char)*cont);
+
+    rnaAux[cont] = '\0';
+    cont -= 1;
+
+    i = 0;
+    while (cont >= 0) {
+        rnaAux[i] = rna[cont];
+        i++;
+        cont--;
+    }
+
+
+    printf("\nInvertido rnaAux: %s\n", rnaAux);
+    return rnaAux;
 }
 
-void complementRNA(char * RNA) {
+void complementRNA(char * rna) {
+    for (int i = 0; rna[i] != '\0' ; i++) {
+        if (rna[i] == 'A') {
+            rna[i] = 'T';
+        } else if (rna[i] == 'T') {
+            rna[i] = 'A';
+        } else rna[i] = rna[i] == 'C' ? 'G' : 'C';
+    }
 
+    printf("\nrna complementar: %s\n", rna);
 }
