@@ -3,7 +3,8 @@
 //
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
+#include <string.h>
+#include <conio.h>
 
 #ifndef CONPUTAGENE_TRANSLATION_H
 #define CONPUTAGENE_TRANSLATION_H
@@ -15,5 +16,8 @@ char * readRNAPart(char*, int, int); /*Ler arquivo parcialmente, ou seja, dentro
 char * polipeptideoGerado(char *); /*Ler rMNA e realiza o processo de tradução. Função imprime e retorna a cadeia com os aminoacidos correspondentes. */
 char * invertRNA(char *); /*Inverte a sequência de nucleotideos do RNA*/
 void complementRNA(char *); /*Gera a fita complementar da fita de RNA existente*/
+char codigoGenetico(char[]);
+float calcMassa(char *);
+
 
 #endif //CONPUTAGENE_TRANSLATION_H
