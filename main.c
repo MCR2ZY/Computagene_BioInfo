@@ -1,30 +1,27 @@
 #include "translation.h"
 
 int main() {
-    FILE *fp;
-    int opc, inicio, final; // Sequencia da equipe 4680854 - 4681408 OUTRA: 3478493 - 3479299 Negativa
+    FILE *fp = NULL;
+    int opc = 0, inicio = 0, final = 0, frame = 0; // Sequencia da equipe 4680854 - 4681408 OUTRA: 3478493 - 3479299 Negativa
     char nomeFile[50];
     float peso;
-    char *rna, *rnaPart, *polipeptideo = NULL;
-
-    if(fp==NULL) {
-        printf("\n\tERRO AO ABRIR ARQUIVO");
-        printf("\n\tPressione <ENTER> para finalizar...\n\t");
-        exit(1);
-    }
+    char *rna = NULL, *rnaPart = NULL, *polipeptideo = NULL;
 
     printf("\tCOMPUTAGENE\n");
 
     do {
         printf("\n\tEscolha sua opcao: \n");
 
-        printf("\n1: Ler rna completo.\n");
-        printf("\n2: Ler rna parcial.\n");
-        printf("\n3: Gerar fita complementar.\n");
-        printf("\n4: Imprimir polipeptideo.\n");
-        printf("\n5: Imprimir a massa do polipeptideo.\n");
+        printf("1: Ler rna completo.\n");
+        printf("2: Ler rna parcial.\n");
+        printf("3: Gerar fita complementar.\n");
+        printf("4: Imprimir polipeptideo.\n");
+        printf("5: Imprimir a massa do polipeptideo.\n");
+        printf("6: Frame de Leitura.\n");
+        printf("7: Encerrar.\n");
 
-        scanf("%d", &opc);
+
+        scanf("%i", &opc);
 
         switch (opc) {
             case 1:
@@ -36,9 +33,9 @@ int main() {
 
             case 2:
                 printf("\nDigite a posicao do nucleotideo inicial\n");
-                scanf("%d", &inicio);
+                scanf("%i", &inicio);
                 printf("\nDigite a posicao do nucleotideo final\n");
-                scanf("%d", &final);
+                scanf("%i", &final);
                 rnaPart = readRNAPart(rna, inicio, final);
             break;
 
@@ -56,9 +53,19 @@ int main() {
 
             case 5:
                 peso = calcMassa(polipeptideo);
-                printf("Peso molecular: %fg/mol", peso);
+                printf("\nPeso molecular: %fg/mol\n", peso);
+                break;
+
+            case 6:
+                frame = calcFrame(inicio);
+                printf("\nFrame de leitura: %i\n", frame);
+                break;
+
+            case 7:
+                exit(EXIT_SUCCESS);
 
             default:
+                printf("\nOpcao Invalida.\n");
                 break;
         }
     }

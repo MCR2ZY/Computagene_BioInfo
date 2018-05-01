@@ -12,14 +12,14 @@ char * readRNAFull(FILE *fp) {
 
     fgets(cabecalho, sizeof(cabecalho), fp); // Consome a primeira linha
 
-    aux = fgetc(fp);
+    aux = (char) fgetc(fp);
     while(aux != EOF) { // Conta a quantidade de letras total do arquivo
         if(aux != '\n' && aux != '\t' && aux != ' ') {
             qntLetras++;
-            aux = fgetc(fp);
+            aux = (char) fgetc(fp);
         }
         else
-            aux = fgetc(fp);
+            aux = (char) fgetc(fp);
     }
     printf("O numero total de caratfcteres eh: %d \n", qntLetras);
 
@@ -30,7 +30,7 @@ char * readRNAFull(FILE *fp) {
     rna = (char *) malloc(sizeof(char) * (qntLetras+1)); //Aloca memoria para todas as letras
 
     for (int i = 0; i < qntLetras; i++) { // Salva as letras na memoria
-        aux = fgetc(fp);
+        aux = (char) fgetc(fp);
         if(aux != '\n' && aux != '\t' && aux != ' ') {
             rna[i] = aux;
         }
@@ -97,7 +97,8 @@ char *polipeptideoGerado(char *rna) {
 char * invertRNA(char *rna) {
     char *rnaAux;
     int  cont = 0;
-    int i,j;
+    int i, j;
+    j = 0;
 
     for (i = 0; rna[i] != '\0' ; i++) {
         cont++;
@@ -108,10 +109,9 @@ char * invertRNA(char *rna) {
     rnaAux[cont] = '\0';
     cont -= 1;
 
-    i = 0;
     while (cont >= 0) {
-        rnaAux[i] = rna[cont];
-        i++;
+        rnaAux[j] = rna[cont];
+        j++;
         cont--;
     }
 
@@ -126,7 +126,7 @@ void complementRNA(char * rna) {
             rna[i] = 'T';
         } else if (rna[i] == 'T') {
             rna[i] = 'A';
-        } else rna[i] = rna[i] == 'C' ? 'G' : 'C';
+        } else rna[i] = (char) (rna[i] == 'C' ? 'G' : 'C');
     }
 
     printf("\nrna complementar: %s\n", rna);
@@ -223,5 +223,13 @@ float calcMassa(char *polipept) {
         }
     }
     return peso;
+}
+
+int calcFrame(int posicInic) {
+    int frame;
+
+    frame = posicInic % 3 + 1;
+
+    return frame;
 }
 
