@@ -233,3 +233,70 @@ int calcFrame(int posicInic) {
     return frame;
 }
 
+int buscaPromotor(char *rna, int posicInic, int utr) {
+
+    char aux[utr], promotor[utr];
+    int tamAux = 0, tamPromotor = 0;
+    int contATAux = 0, contATPromotor = 0;
+    int qntAAux = 0, qntTAux = 0;
+    int qntAPromotor = 0, qntTPromotor = 0;
+    int posicPromotor = 0;
+
+
+    for(int i = posicInic - 1; i >= posicInic - utr; i--) {
+        if(rna[i] == 'A' || rna[i] == 'T') {
+            aux[tamAux] = rna[i];
+            tamAux++;
+        } else {
+            if(tamAux > tamPromotor) {
+                strcpy(promotor, aux);
+                tamPromotor = tamAux;
+                posicPromotor = i;
+                tamAux = 0;
+
+            } else if(tamAux == tamPromotor) {
+                for (int j = 0; j < tamAux; j+=2) {
+                    if(!strncmp(aux, "AT",2)){
+                        contATAux++;
+                    }
+                }
+                for (int k = 0; k < tamPromotor; k+=2) {
+                    if(!strncmp(promotor, "AT",2)){
+                        contATPromotor++;
+                    }
+                }
+                if(contATAux > contATPromotor) {
+                    strcpy(promotor, aux);
+                    tamPromotor = tamAux;
+                    posicPromotor = i;
+                    tamAux = contATAux = contATPromotor = 0;
+                } else if(contATAux == contATPromotor) {
+                    for (int j = 0; j < tamAux; j++) {
+                        if(aux[j] == 'A') {
+                            qntAAux++;
+                        } else{
+                            qntTAux++;
+                        }
+                    }
+                    for (int k = 0; k < tamPromotor; k++) {
+                        if(aux[k] == 'A') {
+                            qntAPromotor++;
+                        } else{
+                            qntTPromotor++;
+                        }
+                    }
+                    if((qntAAux/qntTAux)>(qntAPromotor/qntTPromotor)) {
+                        strcpy(promotor, aux);
+                        posicPromotor = i;
+                    }
+                }
+            }
+        }
+    }
+
+    promotor[tamPromotor] = '\0';
+
+    printf("\nPromotor: %s", promotor);
+    printf("\nPosicao inicial do promotor: %d", posicPromotor);
+    return posicPromotor;
+}

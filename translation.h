@@ -19,6 +19,7 @@ void complementRNA(char *); /*Gera a fita complementar da fita de RNA existente*
 char codigoGenetico(char[]);
 float calcMassa(char *);
 int calcFrame(int );
+int buscaPromotor(char *, int, int);
 
 
 #endif //CONPUTAGENE_TRANSLATION_H
