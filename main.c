@@ -2,32 +2,30 @@
 
 int main() {
     FILE *fp = NULL;
-    int opc = 0, inicio = 0, final = 0, frame = 0; // Sequencia da equipe 4680854 - 4681408 OUTRA: 3478493 - 3479299 Negativa
-    char nomeFile[50];
+    int opc = 0, inicio = 0, final = 0, frame = 0, utr = 0; // Sequencia da equipe 4680854 - 4681408 OUTRA: 3478493 - 3479299 Negativa
     float peso;
     char *rna = NULL, *rnaPart = NULL, *polipeptideo = NULL;
 
     printf("\tCOMPUTAGENE\n");
 
     do {
-        printf("\n\tEscolha sua opcao: \n");
+        printf("\nEscolha sua opcao: \n");
 
         printf("1: Ler rna completo.\n");
         printf("2: Ler rna parcial.\n");
         printf("3: Gerar fita complementar.\n");
         printf("4: Imprimir polipeptideo.\n");
         printf("5: Imprimir a massa do polipeptideo.\n");
-        printf("6: Frame de Leitura.\n");
-        printf("7: Encerrar.\n");
+        printf("6: Frame de leitura.\n");
+        printf("7: Procurar regiao promotora.\n");
+        printf("8: Encerrar.\n");
 
 
         scanf("%i", &opc);
 
         switch (opc) {
             case 1:
-                printf("Insira o nome do arquivo(nomeArquivo.extensao):\n");
-                scanf(" %s", nomeFile);
-                fp = fopen(nomeFile, "r");
+                fp = fopen("genome.txt", "r");
                 rna = readRNAFull(fp);
             break;
 
@@ -62,6 +60,12 @@ int main() {
                 break;
 
             case 7:
+                printf("\nDigite o tamanho do 5'UTR:\n");
+                scanf("%d", &utr);
+                buscaPromotor(rna,inicio,utr);
+                break;
+
+            case 8:
                 exit(EXIT_SUCCESS);
 
             default:
