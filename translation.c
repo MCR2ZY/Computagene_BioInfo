@@ -115,7 +115,6 @@ char * invertRNA(char *rna) {
         cont--;
     }
 
-
     printf("\nInvertido rnaAux: %s\n", rnaAux);
     return rnaAux;
 }
@@ -298,5 +297,32 @@ int buscaPromotor(char *rna, int posicInic, int utr) {
 
     printf("\nPromotor: %s", promotor);
     printf("\nPosicao inicial do promotor: %d", posicPromotor);
+
     return posicPromotor;
+}
+
+int calcFragmentos(char **fragmentos, char *rna, char *enzimaRestricao) { // Retorna o numero de fragmentos //
+
+    int qntFragmentos = 0, qntEnzima = 0, qntBases = 0;
+
+    qntEnzima = strlen(enzimaRestricao);
+    qntFragmentos ++;
+    fragmentos = (char **) malloc(sizeof(char *) * qntFragmentos);
+
+    for (int i = 0; rna[i] != '\0'; i++) {
+
+        for (int j = i; (strncmp((const char *) rna + j, enzimaRestricao, (size_t) qntEnzima - 1) ) != 0 && rna[j] != '\0'; j++) {
+            qntBases++;
+        }
+
+        fragmentos[qntFragmentos - 1] = (char *) malloc(sizeof(char) * qntBases + 1);
+        fragmentos[qntFragmentos - 1][qntBases] = '\0';
+        strncpy(fragmentos[qntFragmentos - 1], rna + i, (size_t) qntBases - 1);
+        i += qntBases;
+        qntBases = 0;
+        qntFragmentos ++;
+        realloc(fragmentos, sizeof(char *) * qntFragmentos);
+    }
+
+    return qntFragmentos;
 }

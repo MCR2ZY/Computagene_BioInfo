@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <conio.h>
 
 #ifndef CONPUTAGENE_TRANSLATION_H
 #define CONPUTAGENE_TRANSLATION_H
@@ -20,6 +19,6 @@ char codigoGenetico(char[]);
 float calcMassa(char *);
 int calcFrame(int );
 int buscaPromotor(char *, int, int);
-
+int calcFragmentos(char **, char *, char *);
 
 #endif //CONPUTAGENE_TRANSLATION_H
