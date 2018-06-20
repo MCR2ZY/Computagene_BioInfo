@@ -4,7 +4,7 @@
 
 #include "translation.h"
 
-char * readRNAFull(FILE *fp) {
+char * lerRNAFull(FILE *fp) {
     char cabecalho[TAMCABECALHO];
     char *rna;
     char aux;
@@ -70,7 +70,7 @@ char *readRNAPart(char *rna, int inicio, int fim) {
     return rnaPart;
 }
 
-char *polipeptideoGerado(char *rna) {
+char *gerarPolipeptideo(char *rna) {
     char *polipeptideo, codon[3];
     int cont = 0, j = 0;
 
@@ -248,25 +248,27 @@ int buscaPromotor(char *rna, int posicInic, int utr) {
             tamAux++;
         } else {
             if(tamAux > tamPromotor) {
-                strcpy(promotor, aux);
+                strncpy(promotor, aux, (size_t) tamAux);
                 tamPromotor = tamAux;
+                promotor[tamPromotor] = '\0';
                 posicPromotor = i;
                 tamAux = 0;
 
             } else if(tamAux == tamPromotor) {
                 for (int j = 0; j < tamAux; j+=2) {
-                    if(!strncmp(aux, "AT",2)){
+                    if(!strncmp(aux, "AT",2) || !strncmp(aux, "TA",2)){
                         contATAux++;
                     }
                 }
                 for (int k = 0; k < tamPromotor; k+=2) {
-                    if(!strncmp(promotor, "AT",2)){
+                    if(!strncmp(promotor, "AT",2) || !strncmp(aux, "TA",2)){
                         contATPromotor++;
                     }
                 }
                 if(contATAux > contATPromotor) {
-                    strcpy(promotor, aux);
+                    strncpy(promotor, aux, (size_t) tamAux);
                     tamPromotor = tamAux;
+                    promotor[tamPromotor] = '\0';
                     posicPromotor = i;
                     tamAux = contATAux = contATPromotor = 0;
                 } else if(contATAux == contATPromotor) {
@@ -285,7 +287,9 @@ int buscaPromotor(char *rna, int posicInic, int utr) {
                         }
                     }
                     if((qntAAux/qntTAux)>(qntAPromotor/qntTPromotor)) {
-                        strcpy(promotor, aux);
+                        strncpy(promotor, aux, (size_t) tamAux);
+                        tamPromotor = tamAux;
+                        promotor[tamPromotor] = '\0';
                         posicPromotor = i;
                     }
                 }
@@ -301,28 +305,45 @@ int buscaPromotor(char *rna, int posicInic, int utr) {
     return posicPromotor;
 }
 
-int calcFragmentos(char **fragmentos, char *rna, char *enzimaRestricao) { // Retorna o numero de fragmentos //
+char **calcFragmentos(int *qntFragmentos, char *rna, char *enzimaRestricao) { // Retorna o numero de fragmentos //
 
-    int qntFragmentos = 0, qntEnzima = 0, qntBases = 0;
+    int qntEnzima = 0, qntBases = 0;
+    char **fragmentos = NULL;
 
     qntEnzima = strlen(enzimaRestricao);
-    qntFragmentos ++;
-    fragmentos = (char **) malloc(sizeof(char *) * qntFragmentos);
 
     for (int i = 0; rna[i] != '\0'; i++) {
+        if(!strncmp((const char *) rna + i, enzimaRestricao, (size_t) qntEnzima)) {
+            *qntFragmentos += 1;
+        }
+    }
 
-        for (int j = i; (strncmp((const char *) rna + j, enzimaRestricao, (size_t) qntEnzima - 1) ) != 0 && rna[j] != '\0'; j++) {
+    *qntFragmentos += 1;
+
+    fragmentos = (char **) malloc(sizeof(char *) * (*qntFragmentos));
+
+    for (int i = 0, k = 0; k < *qntFragmentos; k++) {
+
+        for (int j = i; (strncmp((const char *) rna + j, enzimaRestricao, (size_t) qntEnzima) ) != 0 && rna[j] != '\0'; j++) {
             qntBases++;
         }
 
-        fragmentos[qntFragmentos - 1] = (char *) malloc(sizeof(char) * qntBases + 1);
-        fragmentos[qntFragmentos - 1][qntBases] = '\0';
-        strncpy(fragmentos[qntFragmentos - 1], rna + i, (size_t) qntBases - 1);
+        qntBases++;
+
+        fragmentos[k] = (char *) malloc(sizeof(char) * qntBases + 1);
+        fragmentos[k][qntBases] = '\0';
+        strncpy(fragmentos[k], rna + i, (size_t) qntBases);
         i += qntBases;
         qntBases = 0;
-        qntFragmentos ++;
-        realloc(fragmentos, sizeof(char *) * qntFragmentos);
     }
 
-    return qntFragmentos;
+    return fragmentos;
+}
+
+void leArqReads(structRead reads[], FILE * fp) {
+    int lixo;
+    for (int i = 0; i < QNTREADS; i++) {
+        fscanf(fp, "%d %u %u %c\n", lixo, reads[i].inicio, reads[i].fim, reads[i].fita);
+        reads[i].contigRead = 0;
+    }
 }
